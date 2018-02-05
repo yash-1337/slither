@@ -142,14 +142,14 @@ class Slither {
         this.r = lerp(this.r, 7 + (blobs[0].r * floor(score / 50) / 2), 0.05);
 
         if (this.tail.length === this.total) {
-            this.tail.shift();
+            this.tail.pop();
         } else if (this.tail.length > this.total) {
             let amt = this.tail.length - this.total;
-            this.tail = this.tail.slice(2);
+            this.tail = this.tail.slice(0, amt + 1);
         }
 
         if (this.total >= 10) {
-            this.tail.push(createVector(this.pos.x, this.pos.y));
+            this.tail.unshift(createVector(this.pos.x, this.pos.y));
         }
 
         if (score >= 25 && (keyIsDown(32) || mouseIsPressed)) {
