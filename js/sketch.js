@@ -90,7 +90,7 @@ class Slither {
 
         if (this.tail.length > 0) {
             let amt = 0;
-            for (let i = 0; i < this.tail.length; i++) {
+            for (let i = this.tail.length - 1; i >= 0; i--) {
                 strokeWeight(1);
                 stroke(25, 25);
 
