@@ -145,7 +145,7 @@ class Slither {
             this.tail.shift();
         } else if (this.tail.length > this.total) {
             let amt = this.tail.length - this.total;
-            this.tail = this.tail.slice(0, amt + 1);
+            this.tail = this.tail.slice(2);
         }
 
         if (this.total >= 10) {
