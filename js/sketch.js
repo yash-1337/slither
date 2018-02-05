@@ -25,7 +25,7 @@ function setup() {
 }
 
 function draw() {
-    background(25);
+    background(21);
 
     translate(width / 2, height / 2);
     let newzoom = 30 / slither.r;
@@ -152,7 +152,7 @@ class Slither {
             this.tail.unshift(createVector(this.pos.x, this.pos.y));
         }
 
-        if (score >= 25 && (keyIsDown(32) || mouseIsPressed)) {
+        if (score >= 10 && (keyIsDown(32) || mouseIsPressed)) {
 
             this.zooming = true;
 
@@ -182,13 +182,18 @@ class Blob {
         this.red = red;
         this.green = green;
         this.blue = blue;
+        this.z = 0;
     }
 
     render() {
 
-        strokeWeight(blobRadius);
+        let amt = sin(this.z);
+
+        strokeWeight(blobRadius + amt);
         stroke(this.red, this.green, this.blue, 100);
         fill(this.red, this.green, this.blue, 225);
         ellipse(this.pos.x, this.pos.y, this.r * 2);
+
+        this.z += 0.3;
     }
 }
