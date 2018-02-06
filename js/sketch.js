@@ -8,7 +8,7 @@ let zoom = 1;
 
 let minWidth, maxWidth, minHeight, maxHeight;
 
-let blobRadius = 3;
+let blobRadius = 1.5;
 
 function setup() {
     createCanvas(windowWidth - 20, windowHeight - 20);
@@ -62,7 +62,7 @@ function draw() {
 class Slither {
     constructor() {
         this.pos = createVector(0, 0);
-        this.r = 7;
+        this.r = 4;
         this.red = random(150, 255);
         this.green = random(150, 255);
         this.blue = random(150, 255);
@@ -70,13 +70,11 @@ class Slither {
         this.zoomgreen = this.green + 25;
         this.zoomblue = this.blue + 25;
         this.vel = createVector(0, 0);
-
         this.total = 10;
         this.tail = [];
-
         this.eyeSeparationVal = 0;
-
         this.zooming = false;
+        this.lerpAmt = 0.2;
 
     }
 
@@ -93,16 +91,14 @@ class Slither {
             for (let i = this.tail.length - 1; i >= 0; i--) {
                 strokeWeight(1);
                 stroke(25, 25);
-
                 ellipse(this.tail[i].x, this.tail[i].y, this.r * 2);
-
-
             }
         }
 
         ellipse(this.pos.x, this.pos.y, this.r * 2);
 
         push();
+
         translate(this.pos.x, this.pos.y);
         rotate(this.vel.heading());
 
@@ -111,11 +107,15 @@ class Slither {
         noStroke();
 
         fill(255);
+
         ellipse(2, -2 - this.eyeSeparationVal, (this.r / 2));
         ellipse(2, 2 + this.eyeSeparationVal, (this.r / 2));
+
         fill(0)
+
         ellipse(2, -2 - this.eyeSeparationVal, (this.r / 5));
         ellipse(2, 2 + this.eyeSeparationVal, (this.r / 5));
+
         pop();
     }
 
@@ -126,7 +126,7 @@ class Slither {
 
         let newvel = createVector(mouseX - width / 2, mouseY - height / 2);
         newvel.setMag(3);
-        this.vel.lerp(newvel, 0.2);
+        this.vel.lerp(newvel, this.lerpAmt);
         this.pos.add(this.vel);
 
         for (let blob of blobs) {
@@ -139,7 +139,7 @@ class Slither {
             }
         }
 
-        this.r = lerp(this.r, 7 + (blobs[0].r * floor(score / 50) / 2), 0.05);
+        this.r = lerp(this.r, 7 + (blobRadius * floor(score / 50) * 2), 0.05);
 
         if (this.tail.length === this.total) {
             this.tail.pop();
@@ -152,11 +152,14 @@ class Slither {
             this.tail.unshift(createVector(this.pos.x, this.pos.y));
         }
 
-        if (score >= 10 && (keyIsDown(32) || mouseIsPressed)) {
+        if (score > 10 && (keyIsDown(32) || mouseIsPressed)) {
 
             this.zooming = true;
 
-            this.vel.mult(1.17);
+            this.vel.mult(1.25);
+
+            this.lerpAmt += 0.005;
+            this.lerpAmt = constrain(this.lerpAmt, 0.2, 0.75);
 
             score -= 1;
 
@@ -166,6 +169,7 @@ class Slither {
 
         } else {
             this.zooming = false;
+            this.lerpAmt = 0.2;
         }
 
         if (score >= 10) {
@@ -189,7 +193,7 @@ class Blob {
 
         let amt = sin(this.z);
 
-        strokeWeight(blobRadius + amt);
+        strokeWeight(blobRadius + 1 + amt / 2);
         stroke(this.red, this.green, this.blue, 100);
         fill(this.red, this.green, this.blue, 225);
         ellipse(this.pos.x, this.pos.y, this.r * 2);
