@@ -24,6 +24,10 @@ function setup() {
     }
 }
 
+function windowResized() {
+    resizeCanvas(windowWidth - 20, windowHeight - 20);
+}
+
 function draw() {
     background(21);
 
@@ -62,7 +66,7 @@ function draw() {
 class Slither {
     constructor() {
         this.pos = createVector(0, 0);
-        this.r = 4;
+        this.r = 3;
         this.red = random(150, 255);
         this.green = random(150, 255);
         this.blue = random(150, 255);
